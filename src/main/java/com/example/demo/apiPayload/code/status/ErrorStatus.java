@@ -29,7 +29,8 @@ public enum ErrorStatus implements BaseErrorCode {
     ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND, "ARTICLE4001", "게시글이 없습니다."),
     TEMP_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "TEMP500", "임시 에러입니다."),
 
-    FOOD_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "FOOD4001","음식 카테고리가 없습니다");
+    FOOD_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "FOOD4001","음식 카테고리가 없습니다"),
+    MISSON_COMPLETED_BEFORE(HttpStatus.NOT_FOUND,"COMPLETED4001" , "미션이 이미 완료되었습니다."),;
 
 
     private final HttpStatus httpStatus;
