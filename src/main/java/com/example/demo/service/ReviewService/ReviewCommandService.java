@@ -1,10 +1,10 @@
 package com.example.demo.service.ReviewService;
 
 import com.example.demo.domain.Review;
-import com.example.demo.web.dto.ReviewStore.StoreReviewRequestDTO;
+import com.example.demo.web.dto.ReviewStore.StoreRequestDTO;
 
 public interface ReviewCommandService {
 
-    Review createReview(StoreReviewRequestDTO body);
+    Review createReview(StoreRequestDTO body);
 
 }

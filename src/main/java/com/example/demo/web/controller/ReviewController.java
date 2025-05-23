@@ -1,15 +1,17 @@
 package com.example.demo.web.controller;
 
+
+
 import com.example.demo.apiPayload.ApiResponse;
 import com.example.demo.domain.Review;
 import com.example.demo.service.ReviewService.ReviewCommandService;
-import com.example.demo.web.dto.ReviewStore.StoreReviewRequestDTO;
-import com.example.demo.web.dto.ReviewStore.StoreReviewResponseDTO;
+import com.example.demo.web.dto.ReviewStore.StoreRequestDTO;
+import com.example.demo.web.dto.ReviewStore.StoreResponseDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import static com.example.demo.converter.StoreReview.StoreReviewConverter.toReviewDTO;
+import static com.example.demo.converter.StoreReview.StoreConverter.toReviewDTO;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,12 +21,12 @@ public class ReviewController {
     private final ReviewCommandService reviewSvc;
 
     @PostMapping("/{storeId}/reviews")
-    public ApiResponse<StoreReviewResponseDTO.ReviewDTO> create(
+    public ApiResponse<StoreResponseDTO.ReviewDTO> create(
             @PathVariable Long storeId,
-            @RequestBody @Valid StoreReviewResponseDTO body) {
+            @RequestBody @Valid StoreRequestDTO body) {
 
         Review review = reviewSvc.createReview(body);
-        StoreReviewResponseDTO.ReviewDTO reviewDTO = toReviewDTO(review);
+        StoreResponseDTO.ReviewDTO reviewDTO = toReviewDTO(review);
 
         return ApiResponse.onSuccess(reviewDTO);
     }
