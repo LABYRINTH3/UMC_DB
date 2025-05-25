@@ -5,6 +5,7 @@ import com.example.demo.converter.MissionConverter;
 import com.example.demo.converter.StoreReview.StoreConverter;
 import com.example.demo.domain.Mission;
 import com.example.demo.domain.Review;
+import com.example.demo.service.MissionService.MissionQueryServiceImpl;
 import com.example.demo.service.StoreService.StoreQueryService;
 import com.example.demo.service.MissionService.MissionQueryService;
 import com.example.demo.validation.annotation.CheckPage;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 public class StoreRestController {
 
     private final StoreQueryService storeQueryService;
+    private final MissionQueryServiceImpl missionQueryService;
 
     @GetMapping("/{storeId}/reviews")
     @Operation(summary = "특정 가게의 리뷰 목록 조회 API",description = "특정 가게의 리뷰들의 목록을 조회하는 API이며, 페이징을 포함합니다. query String 으로 page 번호를 주세요")
@@ -52,16 +54,14 @@ public class StoreRestController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "페이지가 1보다 작음", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
     })
     @Parameters({
-            @Parameter(name = "storeId", description = "가게 ID (Path Variable)"),
-
-
-            @Parameter(name = "page", description = "1 이상의 정수 (쿼리 스트링)")
+            @Parameter(name = "storeId", description = "가게 ID "),
+            @Parameter(name = "page", description = "1 이상의 정수")
     })
     public ApiResponse<MissionResponseDTO.MissionListDTO> getStoreMissions(
             @PathVariable Long storeId,
             @CheckPage @RequestParam("page") Integer page) {
 
-        Page<Mission> missions = MissionQueryService.getMissionsByStoreId(storeId, page - 1);
+        Page<Mission> missions = missionQueryService.getMissionsByStoreId(storeId, page - 1);
         return ApiResponse.onSuccess(MissionConverter.toMissionListDTO(missions));
     }
 }

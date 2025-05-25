@@ -4,5 +4,5 @@ import com.example.demo.domain.Mission;
 import org.springframework.data.domain.Page;
 
 public interface MissionQueryService {
-    static Page<Mission> getMissionsByStoreId(Long storeId, int pageIndex);
+    Page<Mission> getMissionsByStoreId(Long storeId, int pageIndex);
 }
