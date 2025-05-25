@@ -4,6 +4,7 @@ import com.example.demo.apiPayload.ApiResponse;
 import com.example.demo.converter.StoreReview.StoreConverter;
 import com.example.demo.domain.Review;
 import com.example.demo.service.StoreService.StoreQueryService;
+import com.example.demo.validation.annotation.CheckPage;
 import com.example.demo.web.dto.ReviewStore.StoreResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -35,8 +36,16 @@ public class StoreRestController {
     @Parameters({
             @Parameter(name = "storeId", description = "가게의 아이디, path variable 입니다!")
     })
-    public ApiResponse<StoreResponseDTO.ReviewPreViewListDTO> getReviewList(@ExistStore @PathVariable(name = "storeId") Long storeId,@RequestParam(name = "page") Integer page){
-        Page<Review> reviewList = storeQueryService.getReviewList(storeId,page);
+    public ApiResponse<StoreResponseDTO.ReviewPreViewListDTO> getReviewList(@ExistStore @PathVariable(name = "storeId") Long storeId,
+                                                                            @RequestParam(name = "memberId", required = false) Long memberId,
+                                                                            @CheckPage @RequestParam(name = "page") Integer page){
+        Page<Review> reviewList;
+        if (memberId == null) {
+            reviewList = storeQueryService.getReviewList(storeId,page-1);
+        }
+        else {
+            reviewList = storeQueryService.getMyReviewList(storeId,memberId,page-1);
+        }
         return ApiResponse.onSuccess(StoreConverter.reviewPreViewListDTO(reviewList));
     }
 }

@@ -1,9 +1,11 @@
 // src/main/java/com/example/demo/service/store/StoreQueryServiceImpl.java
 package com.example.demo.service.StoreService;
 
+import com.example.demo.domain.Member;
 import com.example.demo.domain.Review;
 import com.example.demo.domain.Store;
 import com.example.demo.repository.ReviewRepository;
+import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.StoreRepository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,7 @@ public class StoreQueryServiceImpl implements StoreQueryService{
 
     private final StoreRepository storeRepository;
 
+    private final MemberRepository memberRepository;
     private final ReviewRepository reviewRepository;
 
     @Override
@@ -43,6 +46,15 @@ public class StoreQueryServiceImpl implements StoreQueryService{
         Store store = storeRepository.findById(StoreId).get();
 
         Page<Review> StorePage = reviewRepository.findAllByStore(store, PageRequest.of(page, 10));
+        return StorePage;
+    }
+
+    @Override
+    public Page<Review> getMyReviewList(Long StoreId, Long MemberId, Integer page) {
+        Store store = storeRepository.findById(StoreId).get();
+        Member member = memberRepository.findById(MemberId).get();
+
+        Page<Review> StorePage = reviewRepository.findAllByStoreAndMember(store,member,PageRequest.of(page, 10));
         return StorePage;
     }
 }
