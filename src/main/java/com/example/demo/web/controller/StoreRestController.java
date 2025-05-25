@@ -1,9 +1,14 @@
 package com.example.demo.web.controller;
 
 import com.example.demo.apiPayload.ApiResponse;
+import com.example.demo.converter.MissionConverter;
 import com.example.demo.converter.StoreReview.StoreConverter;
+import com.example.demo.domain.Mission;
 import com.example.demo.domain.Review;
 import com.example.demo.service.StoreService.StoreQueryService;
+import com.example.demo.service.MissionService.MissionQueryService;
+import com.example.demo.validation.annotation.CheckPage;
+import com.example.demo.web.dto.MissionResponseDTO;
 import com.example.demo.web.dto.ReviewStore.StoreResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -38,5 +43,25 @@ public class StoreRestController {
     public ApiResponse<StoreResponseDTO.ReviewPreViewListDTO> getReviewList(@ExistStore @PathVariable(name = "storeId") Long storeId,@RequestParam(name = "page") Integer page){
         Page<Review> reviewList = storeQueryService.getReviewList(storeId,page);
         return ApiResponse.onSuccess(StoreConverter.reviewPreViewListDTO(reviewList));
+    }
+
+    @GetMapping("/{storeId}/missions")
+    @Operation(summary = "특정 가게의 미션 목록 조회", description = "가게의 미션 목록을 1페이지부터")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "페이지가 1보다 작음", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
+    @Parameters({
+            @Parameter(name = "storeId", description = "가게 ID (Path Variable)"),
+
+
+            @Parameter(name = "page", description = "1 이상의 정수 (쿼리 스트링)")
+    })
+    public ApiResponse<MissionResponseDTO.MissionListDTO> getStoreMissions(
+            @PathVariable Long storeId,
+            @CheckPage @RequestParam("page") Integer page) {
+
+        Page<Mission> missions = MissionQueryService.getMissionsByStoreId(storeId, page - 1);
+        return ApiResponse.onSuccess(MissionConverter.toMissionListDTO(missions));
     }
 }
