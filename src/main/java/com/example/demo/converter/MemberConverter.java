@@ -3,11 +3,15 @@ package com.example.demo.converter;
 
 import com.example.demo.domain.Member;
 import com.example.demo.domain.enums.Gender;
+import com.example.demo.domain.mapping.MemberMission;
 import com.example.demo.web.dto.MemberRequestDTO;
 import com.example.demo.web.dto.MemberResponseDTO;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MemberConverter {
 
@@ -40,6 +44,29 @@ public class MemberConverter {
                 .gender(gender)
                 .name(request.getName())
                 .memberPreferList(new ArrayList<>())
+                .build();
+    }
+    public static MemberResponseDTO.MemberMissionPreViewDTO memberMissionPreViewDTO(MemberMission memberMission) {
+        return MemberResponseDTO.MemberMissionPreViewDTO.builder()
+                .missionId(memberMission.getId())
+                .memberName(memberMission.getMember().getName())
+                .storeName(memberMission.getMission().getStore().getName())
+                .reward(memberMission.getMission().getReward())
+                .missionSpec(memberMission.getMission().getMissionSpec())
+                .build();
+    }
+
+    public static MemberResponseDTO.MemberMissionPreViewListDTO memberMissionPreViewListDTO(Page<MemberMission> missionList) {
+
+        List<MemberResponseDTO.MemberMissionPreViewDTO> memberMissionPreViewDTOList = missionList.stream().map(MemberConverter::memberMissionPreViewDTO).collect(Collectors.toList());
+
+        return MemberResponseDTO.MemberMissionPreViewListDTO.builder()
+                .missionList(memberMissionPreViewDTOList)
+                .isFirst(missionList.isFirst())
+                .isLast(missionList.isLast())
+                .totalPage(missionList.getTotalPages())
+                .totalElements(missionList.getTotalElements())
+                .listSize(missionList.getSize())
                 .build();
     }
 
