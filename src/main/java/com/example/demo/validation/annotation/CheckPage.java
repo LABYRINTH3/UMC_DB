@@ -1,6 +1,6 @@
 package com.example.demo.validation.annotation;
 
-import com.example.demo.validation.validator.PageValidator;
+import com.example.demo.validation.validator.PageCheck;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
@@ -8,7 +8,7 @@ import java.lang.annotation.*;
 
 public @interface CheckPage {
     @Documented
-    @Constraint(validatedBy = PageValidator.class)
+    @Constraint(validatedBy = PageCheck.class)
     @Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
     @Retention(RetentionPolicy.RUNTIME)
     public @interface ValidPage {

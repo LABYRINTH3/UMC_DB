@@ -4,7 +4,7 @@ import com.example.demo.validation.annotation.CheckPage;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class PageValidator implements ConstraintValidator<CheckPage, Integer> {
+public class PageCheck implements ConstraintValidator<CheckPage, Integer> {
 
     @Override
     public void initialize(CheckPage constraintAnnotation) {
