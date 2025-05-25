@@ -13,7 +13,7 @@ public @interface CheckPage {
     @Retention(RetentionPolicy.RUNTIME)
     public @interface ValidPage {
 
-        String message() default "page는 1 이상의 정수여야 합니다.";
+        String message() default "page는 1 이상의 정수";
         Class<?>[] groups() default {};
         Class<? extends Payload>[] payload() default {};
     }
